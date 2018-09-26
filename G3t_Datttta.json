@@ -1,0 +1,53 @@
+<?php	
+	header("Content-Type: text/html;charset=UTF-8");
+	
+	$json = file_get_contents('php://input');
+	$obj = json_decode($json);
+	$carr = $obj->{'req'};
+	$app = $obj->{'app'};
+	
+    $dbhost = "localhost";
+    $dbname = "bechimar_datacenter";
+    $dbuser = "bechimar";
+    $dbpass = "09359325492.";
+	
+	// read from sql
+	$con=mysqli_connect($dbhost,$dbuser,$dbpass,$dbname);
+	// Check connection
+	if (mysqli_connect_errno())
+	{
+	echo "Failed to connect to MySQL: " . mysqli_connect_error();
+	}
+	
+	$connect->set_charset("utf8");
+	
+	$sql = "SELECT * from famouser";
+	
+	
+	
+	$result = $connect->query($sql);
+    
+	if ($result->num_rows > 0) {
+		while($row = $result->fetch_assoc()) {
+			
+			if($carr==$row["operator"]){
+				
+				
+				$obj = new stdClass();
+				$obj->place=$row["place"];
+				$obj->famous=$row["famous"];
+				$obj->category=$row["category"];
+				$obj->catimage=$row["catimage"];
+
+				
+				
+				
+				echo json_encode($obj,JSON_UNESCAPED_UNICODE);
+				
+			}
+		}
+		
+	} else {
+		echo "no";
+	}
+?>
